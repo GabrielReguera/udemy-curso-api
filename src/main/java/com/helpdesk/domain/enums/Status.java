@@ -1,15 +1,15 @@
-package com.helpdesk.enums;
+package com.helpdesk.domain.enums;
 
-public enum Perfil {
+public enum Status {
 
-    ADMIN(0, "ROLE_ADMIN"),
-    CLIENTE(1, "ROLE_CLIENTE"),
-    TECNICO(2, "ROLE_TECNICO");
+    ABERTO(0, "ABERTO"),
+    ANDAMENTO(1, "ANDAMENTO"),
+    ENCERRADO(2, "ENCERRADO");
 
     private Integer codigo;
     private String descricao;
 
-    private Perfil(Integer codigo, String descricao) {
+    private Status(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
@@ -39,6 +39,6 @@ public enum Perfil {
                 return x;
             }
         }
-        throw new IllegalArgumentException("Perfil Inválido");
+        throw new IllegalArgumentException("Status Inválido");
     }
 }
