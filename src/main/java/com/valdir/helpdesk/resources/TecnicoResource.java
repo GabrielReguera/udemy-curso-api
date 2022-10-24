@@ -1,5 +1,8 @@
 package com.valdir.helpdesk.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,5 +25,11 @@ public class TecnicoResource {
     public ResponseEntity<Object> findById(@PathVariable Integer id) {
         Tecnico find = service.findById(id);
         return ResponseEntity.ok().body(new TecnincoDto(find));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Object>> findAll() {
+        List<Tecnico> list = service.findAll();
+        return ResponseEntity.ok().body(list.stream().map(x -> new TecnincoDto(x)).collect(Collectors.toList()));
     }
 }
