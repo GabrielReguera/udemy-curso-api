@@ -6,9 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.valdir.helpdesk.domain.Pessoa;
 import com.valdir.helpdesk.domain.Tecnico;
 import com.valdir.helpdesk.domain.dtos.TecnicoDto;
+import com.valdir.helpdesk.repositories.PessoaRepository;
 import com.valdir.helpdesk.repositories.TecnicoRepository;
+import com.valdir.helpdesk.services.exceptions.DataIntegrityViolationException;
 import com.valdir.helpdesk.services.exceptions.ObjectnotFoundException;
 
 @Service
@@ -16,6 +19,9 @@ public class TecnicoService {
 
     @Autowired
     private TecnicoRepository tecnicoRepository;
+
+    @Autowired
+    private PessoaRepository pessoaRepository;
 
     public Tecnico findById(Integer id) {
         try {
@@ -47,12 +53,29 @@ public class TecnicoService {
     public Tecnico create(TecnicoDto tecnicoDto) {
         try {
             tecnicoDto.setId(null);
+            validaPorCpfEEmail(tecnicoDto);
             Tecnico newObj = new Tecnico(tecnicoDto);
             {
                 return tecnicoRepository.save(newObj);
             }
         } catch (Exception e) {
-            throw new ObjectnotFoundException("Erro ao criar Tecnico " + e.getMessage());
+            if (e.getClass() == DataIntegrityViolationException.class) {
+                throw new DataIntegrityViolationException(e.getMessage());
+            } else {
+                throw new ObjectnotFoundException("Erro ao criar Tecnico " + e.getMessage());
+            }
+        }
+    }
+
+    private void validaPorCpfEEmail(TecnicoDto tecnicoDto) {
+        Optional<Pessoa> obj = pessoaRepository.findByCpf(tecnicoDto.getCpf());
+        if (obj.isPresent() && !obj.get().getId().equals(tecnicoDto.getId())) {
+            throw new DataIntegrityViolationException("Cpf ja cadastrado no sitema");
+        }
+
+        obj = pessoaRepository.findByEmail(tecnicoDto.getEmail());
+        if (obj.isPresent() && !obj.get().getId().equals(tecnicoDto.getId())) {
+            throw new DataIntegrityViolationException("Email ja cadastrado no sitema");
         }
     }
 }
