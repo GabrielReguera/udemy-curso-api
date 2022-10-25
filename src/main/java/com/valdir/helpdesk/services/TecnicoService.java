@@ -93,4 +93,21 @@ public class TecnicoService {
             throw new ObjectnotFoundException("Erro ao atualizar Tecnico" + e.getMessage());
         }
     }
+
+    public void delete(Integer id) {
+        try {
+            Optional<Tecnico> obj = tecnicoRepository.findById(id);
+            if (obj.isPresent()) {
+                if (obj.get().getChamados().size() > 0) {
+                    throw new DataIntegrityViolationException("Tecnico orderns de serviço e não pode ser deletado");
+                } else {
+                    tecnicoRepository.deleteById(id);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new ObjectnotFoundException("Erro ao deletar Tecnico");
+        }
+
+    }
 }

@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,8 +49,14 @@ public class TecnicoResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> update(@PathVariable Integer id, @Valid @RequestBody TecnicoDto tecnicoDto){
+    public ResponseEntity<Object> update(@PathVariable Integer id, @Valid @RequestBody TecnicoDto tecnicoDto) {
         Tecnico obj = service.update(id, tecnicoDto);
         return ResponseEntity.ok().body(new TecnicoDto(obj));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Object> delete(@PathVariable Integer id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
