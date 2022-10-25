@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.valdir.helpdesk.domain.Tecnico;
+import com.valdir.helpdesk.domain.dtos.TecnicoDto;
 import com.valdir.helpdesk.repositories.TecnicoRepository;
 import com.valdir.helpdesk.services.exceptions.ObjectnotFoundException;
 
@@ -31,15 +32,27 @@ public class TecnicoService {
         }
     }
 
-    public List<Tecnico> findAll(){
+    public List<Tecnico> findAll() {
         try {
             List<Tecnico> find = tecnicoRepository.findAll();
-            if(!find.isEmpty()){
+            if (!find.isEmpty()) {
                 return find;
             }
             throw new ObjectnotFoundException("Não existe tecnicos cadastrados");
         } catch (Exception e) {
             throw new ObjectnotFoundException("Erro ao buscar Tecnicos");
+        }
+    }
+
+    public Tecnico create(TecnicoDto tecnicoDto) {
+        try {
+            tecnicoDto.setId(null);
+            Tecnico newObj = new Tecnico(tecnicoDto);
+            {
+                return tecnicoRepository.save(newObj);
+            }
+        } catch (Exception e) {
+            throw new ObjectnotFoundException("Erro ao criar Tecnico " + e.getMessage());
         }
     }
 }

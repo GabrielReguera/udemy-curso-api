@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.valdir.helpdesk.domain.Tecnico;
 import com.valdir.helpdesk.domain.enums.Perfil;
 
-public class TecnincoDto {
+public class TecnicoDto {
     private static final long serialVersionUID = 1L;
 
     protected Integer id;
@@ -22,10 +22,11 @@ public class TecnincoDto {
     @JsonFormat(pattern = "dd/MM/yyyy")
     protected LocalDate dataCriacao = LocalDate.now();
 
-    public TecnincoDto() {
+    public TecnicoDto() {
+        addPerfis(Perfil.CLIENTE);
     }
 
-    public TecnincoDto(Tecnico tecnico) {
+    public TecnicoDto(Tecnico tecnico) {
         this.id = tecnico.getId();
         this.nome = tecnico.getNome();
         this.cpf = tecnico.getCpf();
@@ -33,6 +34,7 @@ public class TecnincoDto {
         this.senha = tecnico.getSenha();
         this.perfis = tecnico.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
         this.dataCriacao = tecnico.getDataCriacao();
+        addPerfis(Perfil.CLIENTE);
     }
 
     public Integer getId() {
