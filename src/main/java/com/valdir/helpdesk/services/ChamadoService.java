@@ -1,5 +1,6 @@
 package com.valdir.helpdesk.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +70,10 @@ public class ChamadoService {
                     chamado.setId(chamadoDto.getId());
                 }
 
+                if(chamadoDto.getStatus().equals(2)){
+                    chamado.setDataFechamento(LocalDate.now());
+                }
+
                 chamado.setTecnico(tecnico);
                 chamado.setCliente(cliente);
                 chamado.setPrioridade(Prioridade.toEnum(chamadoDto.getPrioridade()));
@@ -80,6 +85,21 @@ public class ChamadoService {
             throw new ObjectnotFoundException("Chamado está vazio");
         } catch (Exception e) {
             throw new ObjectnotFoundException("Problema ao fazer um novo chamado");
+        }
+    }
+
+    public Chamado update(Integer id, @Valid ChamadoDto chamadoDto) {
+        try {
+            chamadoDto.setId(id);
+            Chamado oldObj = findById(id);
+            if (oldObj != null) {
+                oldObj = newChamado(chamadoDto);
+
+                return chamadoRepository.save(oldObj);
+            }
+            throw new ObjectnotFoundException("Chamado não encontrado'");
+        } catch (Exception e) {
+            throw new ObjectnotFoundException("Erro ao atualizar chamado");
         }
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,19 +35,24 @@ public class ChamadoResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<Object>> findAll(){
+    public ResponseEntity<List<Object>> findAll() {
         List<Chamado> objs = service.findAll();
         return ResponseEntity.ok().body(objs.stream().map(x -> new ChamadoDto(x)).collect(Collectors.toList()));
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@Valid @RequestBody ChamadoDto chamadoDto){
+    public ResponseEntity<Object> create(@Valid @RequestBody ChamadoDto chamadoDto) {
         Chamado obj = service.create(chamadoDto);
         URI uri = ServletUriComponentsBuilder
-        .fromCurrentRequest().
-        path("/{id}")
-        .buildAndExpand(obj.getId())
-        .toUri();
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getId())
+                .toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Object> update(@PathVariable Integer id, @Valid @RequestBody ChamadoDto chamadoDto) {
+        Chamado newObj = service.update(id, chamadoDto);
+        return ResponseEntity.ok().body(new ChamadoDto(newObj));
     }
 }
