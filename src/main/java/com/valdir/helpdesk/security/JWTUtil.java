@@ -12,7 +12,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JWTUtil {
 
     @Value("${jwt.expiration}")
-    private long expiration;
+    private Long expiration;
 
     @Value("${jwt.secret}")
     private String secret;

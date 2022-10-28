@@ -29,7 +29,7 @@ public class UserSS implements UserDetails {
         this.senha = senha;
         this.authorities = perfis.stream()
                 .map(x -> new SimpleGrantedAuthority(x.getDescricao()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     public Integer getId() {

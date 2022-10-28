@@ -12,8 +12,6 @@ import com.valdir.helpdesk.domain.Tecnico;
 import com.valdir.helpdesk.domain.enums.Perfil;
 
 public class TecnicoDto {
-    private static final long serialVersionUID = 1L;
-
     protected Integer id;
 
     @NotNull(message = "Campo nome é requerido")
