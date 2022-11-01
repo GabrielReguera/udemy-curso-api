@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.headers().frameOptions().disable();
         }
 
-        http.cors().and().csrf();
+        http.cors().and().csrf().disable();
 
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 
