@@ -90,6 +90,9 @@ public class TecnicoService {
         try {
             tecnicoDto.setId(id);
             Tecnico oldObj = findById(id);
+            if (!tecnicoDto.getSenha().equals(oldObj.getSenha())) {
+                tecnicoDto.setSenha(encoder.encode(tecnicoDto.getSenha()));
+            }
             validaPorCpfEEmail(tecnicoDto);
             oldObj = new Tecnico(tecnicoDto);
             return tecnicoRepository.save(oldObj);

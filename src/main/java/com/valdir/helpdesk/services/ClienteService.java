@@ -90,6 +90,9 @@ public class ClienteService {
         try {
             clienteDto.setId(id);
             Cliente oldObj = findById(id);
+            if (!clienteDto.getSenha().equals(oldObj.getSenha())) {
+                clienteDto.setSenha(encoder.encode(clienteDto.getSenha()));
+            }
             validaPorCpfEEmail(clienteDto);
             oldObj = new Cliente(clienteDto);
             return clienteRepository.save(oldObj);
